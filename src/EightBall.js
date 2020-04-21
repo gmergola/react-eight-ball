@@ -1,27 +1,52 @@
 import React, { useState } from 'react';
 import './EightBall.css';
-import Count from './Count';
 
+function choice(answers){
+  let randomIdx = Math.floor(Math.random() * answers.length);
+  return answers[randomIdx];
+}
 
 
 function EightBall({ answers }){
   const [message, setMessage] = useState("Think of a question!");
   const [color, setColor] = useState("black");
-
-  let randomIdx = Math.floor(Math.random() * answers.length);
+  const [redCount, setRedCount] = useState(0);
+  const [goldenRodCount, setGoldenRodCount] = useState(0);
+  const [greenCount, setGreenCount] = useState(0);
+  const count = () => {
+    if(color === 'red'){
+      setRedCount(redCount+1);
+    }
+    if(color === 'green'){
+      setGreenCount(greenCount+1);
+    }
+    if(color === 'goldenrod'){
+      setGoldenRodCount(goldenRodCount+1);
+    }
+  }
   
   const styles = {
     backgroundColor: color,
     color: "white"
   }
 
+  function handleClick(){
+    const { msg, color } = choice(answers);
+    setMessage(msg);
+    setColor(color);
+    count();
+  }
+
   return (
     <div className="EightBall-ball">
-      <Count color={ color }/>
-      <button className="EightBall-button" style={ styles } onClick={() => {
-        setMessage(answers[randomIdx].msg) 
-        setColor(answers[randomIdx].color)
-      }}>{ message }</button>
+      <button className="EightBall-button" style={ styles } onClick={handleClick}>
+        { message }
+      </button>
+      <div className="Count-color-score">
+      <div>Red count = {redCount}</div>
+      <div>Green count = {greenCount}</div>
+      <div>Goldenrod count = {goldenRodCount}</div>
+    </div>
     </div>
   );
 }
